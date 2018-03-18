@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><CONFIG_JAXE>
+<LANGAGE>
+<FICHIER_SCHEMA nom="ExpReport.xsd"/>
+<RACINE element="report"/>
+</LANGAGE>
+
+<!-- ???UI????? -->
+<AFFICHAGE_NOEUDS>
+<AFFICHAGE_ELEMENT element="report" type="division">
+</AFFICHAGE_ELEMENT>
+
+<AFFICHAGE_ELEMENT element="expName" type="zone">
+</AFFICHAGE_ELEMENT>
+
+<AFFICHAGE_ELEMENT element="expInfo" type="formulaire" />
+<AFFICHAGE_ELEMENT element="expName" type="typesimple" />
+<AFFICHAGE_ELEMENT element="reporter" type="formulaire" />
+<AFFICHAGE_ELEMENT element="stuName" type="string" />
+<AFFICHAGE_ELEMENT element="stuNo" type="string" />
+<AFFICHAGE_ELEMENT element="email" type="string" />
+<AFFICHAGE_ELEMENT element="sysID" type="string" />
+<AFFICHAGE_ELEMENT element="reportDate" type="string" />
+<AFFICHAGE_ELEMENT element="grade" type="string" />
+
+<AFFICHAGE_ELEMENT element="sections" type="division" />
+<AFFICHAGE_ELEMENT element="section" type="formulaire" />
+<AFFICHAGE_ELEMENT element="secTitle" type="texte"/>
+<AFFICHAGE_ELEMENT element="secContent" type="division"/>
+
+<AFFICHAGE_ELEMENT element="table" type="tabletexte">
+<PARAMETRE nom="trTag" valeur="tr"/>
+<PARAMETRE nom="tdTag" valeur="td"/>
+<PARAMETRE nom="thTag" valeur="th"/>
+<PARAMETRE nom="colspanAttr" valeur="colspan"/>
+<PARAMETRE nom="rowspanAttr" valeur="rowspan"/>
+<PARAMETRE nom="alignAttr" valeur="align"/>
+</AFFICHAGE_ELEMENT>
+<AFFICHAGE_ELEMENT element="tr" type="zone"/>
+<AFFICHAGE_ELEMENT element="td" type="string"/>
+<AFFICHAGE_ELEMENT element="th" type="string">
+<PARAMETRE nom="style" valeur="GRAS"/>
+</AFFICHAGE_ELEMENT>
+
+<AFFICHAGE_ELEMENT element="notes" type="texte"/>
+<AFFICHAGE_ELEMENT element="image" type="plugin">
+<PARAMETRE nom="classe" valeur="xpages.jeimage.JEImage"/>
+<PARAMETRE nom="srcAtt" valeur="src"/>
+</AFFICHAGE_ELEMENT>
+<AFFICHAGE_ELEMENT element="equation" type="plugin">
+<PARAMETRE nom="classe" valeur="xpages.JEEquationMemoire"/>
+<PARAMETRE nom="srcAtt" valeur="image"/>
+<PARAMETRE nom="texteAtt" valeur="texte"/>
+</AFFICHAGE_ELEMENT>
+
+<AFFICHAGE_ELEMENT element="gapFilling" type="zone">
+<PARAMETRE nom="id" valeur="id"/>
+</AFFICHAGE_ELEMENT>
+<AFFICHAGE_ELEMENT element="evaluations" type="division" />
+<AFFICHAGE_ELEMENT element="evaluation" type="formulaire" />
+<AFFICHAGE_ELEMENT element="solution" type="zone" >
+<PARAMETRE nom="type" valeur="type"/>
+</AFFICHAGE_ELEMENT>
+<AFFICHAGE_ELEMENT element="points" type="typesimple" />
+<AFFICHAGE_ELEMENT element="feedback" type="typesimple" />
+
+<AFFICHAGE_ELEMENT element="singleChoice" type="zone">
+<PARAMETRE nom="id" valeur="id"/>
+</AFFICHAGE_ELEMENT>
+<AFFICHAGE_ELEMENT element="options" type="division" />
+<AFFICHAGE_ELEMENT element="option" type="formulaire" />
+
+</AFFICHAGE_NOEUDS>
+
+<!-- ???UI?????? ????? -->
+<STRINGS langue="zh-CN">
+<DESCRIPTION_CONFIG>????????</DESCRIPTION_CONFIG>
+<STRINGS_ELEMENT element="report">
+<TITRE>report</TITRE>
+</STRINGS_ELEMENT>
+</STRINGS>
+
+
+</CONFIG_JAXE>

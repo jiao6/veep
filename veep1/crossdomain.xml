@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<cross-domain-policy>
+<allow-access-from domain="*.vrsygc.com" />
+<allow-access-from domain="veep.chinacloudapp.cn" />
+<allow-access-from domain="bitmooc.chinacloudapp.cn" />
+<allow-access-from domain="vrsygc.chinacloudapp.cn" />
+</cross-domain-policy>

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="report">
+        <xs:annotation>
+            <xs:documentation>实验报告</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="expInfo"/>
+                <xs:element ref="sections"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="expInfo">
+        <xs:annotation>
+            <xs:documentation>实验信息</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="expName" maxOccurs="1" minOccurs="1"/>
+                <xs:element ref="reporter" maxOccurs="1" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="expName" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>实验名称</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <!-- 实验人信息 -->
+    <xs:element name="reporter">
+        <xs:annotation>
+            <xs:documentation>实验人信息</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="stuName" minOccurs="0"/>
+                <xs:element ref="stuNO" minOccurs="0"/>
+                <xs:element ref="email" minOccurs="0"/>
+                <xs:element ref="sysID" minOccurs="0"/>
+                <xs:element ref="reportDate" minOccurs="0"/>
+                <xs:element ref="grade" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="stuName" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>学生姓名</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="stuNO" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>学生学号</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="email" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>邮箱</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="sysID" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>平台ID</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="reportDate" type="typeDateTime">
+        <xs:annotation>
+            <xs:documentation>实验日期</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="grade" type="xs:float">
+        <xs:annotation>
+            <xs:documentation>实验成绩</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <!-- 实验内容 -->
+    <xs:element name="sections">
+        <xs:annotation>
+            <xs:documentation>实验内容</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element ref="section"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="section">
+        <xs:annotation>
+            <xs:documentation>实验内容细则</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="secTitle"/>
+                <xs:element name="secContent">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element ref="table"/>
+                            <xs:group ref="question"/>
+                            <xs:element ref="notes"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="secTitle">
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="texte"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="notes">
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="texte"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="table">
+        <xs:annotation>
+            <xs:documentation>表格</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="tr"/>
+            </xs:choice>
+            <xs:attribute name="title" type="xs:string" use="optional">
+                <xs:annotation>
+                    <xs:documentation>表格标题</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="tr">
+        <xs:annotation>
+            <xs:documentation>表格中的行</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="td"/>
+                <xs:element ref="th"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="td">
+        <xs:annotation>
+            <xs:documentation>表格的单元格</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="question"/>
+            </xs:choice>
+            <xs:attribute name="align" use="optional">
+                <xs:annotation>
+                    <xs:documentation>对齐方式</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="left"/>
+                        <xs:enumeration value="center"/>
+                        <xs:enumeration value="right"/>
+                        <xs:enumeration value="justify"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="colspan" type="xs:positiveInteger" use="optional">
+                <xs:annotation>
+                    <xs:documentation>横向合并单位</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="rowspan" type="xs:positiveInteger" use="optional">
+                <xs:annotation>
+                    <xs:documentation>纵向合并单位</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="th">
+        <xs:annotation>
+            <xs:documentation>表格头</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="question"/>
+            </xs:choice>
+            <xs:attribute name="align" use="optional">
+                <xs:annotation>
+                    <xs:documentation>对齐方式</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="left"/>
+                        <xs:enumeration value="center"/>
+                        <xs:enumeration value="right"/>
+                        <xs:enumeration value="justify"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="colspan" type="xs:positiveInteger" use="optional">
+                <xs:annotation>
+                    <xs:documentation>横向合并单位</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="rowspan" type="xs:positiveInteger" use="optional">
+                <xs:annotation>
+                    <xs:documentation>纵向合并单位</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- 题目设置 -->
+    <xs:group name="question">
+        <xs:annotation>
+            <xs:documentation>题目类型</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element ref="gapFilling"/>
+            <xs:element ref="singleChoice"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:element name="gapFilling">
+        <xs:annotation>
+            <xs:documentation>填空题</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element ref="answer" minOccurs="0"/>
+                <xs:element ref="feedback" minOccurs="0"/>
+                <xs:element ref="evaluations"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="questionAttr"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="singleChoice">
+        <xs:annotation>
+            <xs:documentation>单选题</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element ref="options" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="answer" minOccurs="0"/>
+                <xs:element ref="feedback" minOccurs="0"/>
+                <xs:element ref="evaluations" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="questionAttr"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="options">
+        <xs:annotation>
+            <xs:documentation>
+                单选题选项
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="option" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+         </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="option" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>
+                selectable choice
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:attributeGroup name="questionAttr">
+        <xs:attribute name="id" type="typeLabel" use="required">
+            <xs:annotation>
+                <xs:documentation>题目ID</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="type" use="optional" default="auto-evaluation">
+            <xs:annotation>
+                <xs:documentation>评分方式</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="auto-evaluation"/>
+                    <xs:enumeration value="evaluation"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="maxLength" use="optional">
+            <xs:annotation>
+                <xs:documentation>允许输入的最大长度</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    
+    <xs:element name="answer">
+        <xs:annotation>
+            <xs:documentation>学生填写的答案</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                 <xs:extension base="xs:string">
+                     <xs:attribute name="isCorrect" use="optional" default="0">
+                         <xs:annotation>
+                             <xs:documentation>是否正确(0不正确; 1正确; 2部分正确)</xs:documentation>
+                         </xs:annotation>
+                         <xs:simpleType>
+                             <xs:restriction base="xs:short">
+                                 <xs:enumeration value="0"/>
+                                 <xs:enumeration value="1"/>
+                                 <xs:enumeration value="2"/>
+                             </xs:restriction>
+                         </xs:simpleType>
+                     </xs:attribute>
+                 </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="evaluations">
+        <xs:annotation>
+            <xs:documentation>评分标准</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="evaluation" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="evaluation">
+        <xs:annotation>
+            <xs:documentation>评分标准细则</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="solution" minOccurs="0"/>
+                <xs:element ref="points" minOccurs="0"/>
+                <xs:element ref="feedback" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="solution">
+        <xs:annotation>
+            <xs:documentation>题目答案</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="type" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                答案类型:
+                                equal：等于类型，多个值用逗号分隔
+                                equation: 公式计算类型
+                                relation: 关系运算类型
+                                logical: 逻辑关系类型
+                                pattern: 模式匹配类型
+                                keywords: 关键字匹配类型，多个关键字用逗号分隔
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="equal"/>
+                                <xs:enumeration value="equation"/>
+                                <xs:enumeration value="relation"/>
+                                <xs:enumeration value="logical"/>
+                                <xs:enumeration value="pattern"/>
+                                <xs:enumeration value="keywords"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="points" type="xs:float">
+        <xs:annotation>
+            <xs:documentation>题目分值</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="feedback" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>题目反馈信息</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:group name="texte">
+        <xs:annotation>
+            <xs:documentation>
+                富文本信息，包括文字、图片、符号、公式等
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element ref="image"/>
+            <xs:element ref="symbole"/>
+            <xs:element ref="equation"/>
+        </xs:choice>
+    </xs:group>
+    <xs:element name="image">
+        <xs:annotation>
+            <xs:documentation>
+                图片，URL地址
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="src" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="symbole">
+        <xs:annotation>
+            <xs:documentation>
+                符号
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attribute name="nom" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="equation">
+        <xs:annotation>
+            <xs:documentation>
+                LATEX格式的公式
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attribute name="texte" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>
+                        LATEX字符串
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- 基本类型 -->
+    <xs:simpleType name="typeLabel">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[\-a-z0-9]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeDate">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[1-2][0-9][0-9][0-9]-[0-1]?[0-9]-[0-3]?[0-9]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeDateTime">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[1-2][0-9][0-9][0-9]-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5]?[0-9]"
+            />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeURL">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="http://.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

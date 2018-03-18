@@ -1,0 +1,328 @@
+<?
+	require_once("config/config.php");;
+	require_once("config/dsql.php");
+?>
+<?
+	error_reporting(0);
+	session_start();
+	require_once("header.php");
+	if(!isset($dsql)){
+		$dsql = new DSQL();
+	}
+	if ($auth_pid != 3) {
+		exit;
+	}
+	if( $action=="groupmodifyaction" ){
+		if(strlen($group_name)>0){
+			$SQL= "select name, path from experimentsgroup  where id = $group_pid limit 0,1";
+			if(!$dsql->query($SQL)){
+				echo "";
+			}else{
+				$dsql->next_record() ;
+				$lastinsid = $dsql->f("lastinsid");
+				$path = $dsql->f("path");
+				$pname  = $dsql->f("name");
+				$SQL= "update experimentsgroup set path='${path},$fid' ,pid = '$group_pid' ,name = '$group_name' where id = $fid";
+
+
+				if(!$dsql->query($SQL)){
+
+				}else{
+					echo "更新组成功 '$group_name' 上级为 $pname";
+				}
+
+			}
+		}
+	}else if( $action=="forumdetail" ){
+		$SQL = "SELECT    id ,	name 	  	,uid ,	pid 	,path 	,status    FROM experimentsgroup  where id='$fid'   order by path       ";
+		$dsql->query($SQL);
+		if($dsql->next_record()){
+			$id=$dsql->f('id');
+			$name=$dsql->f('name');
+			$insertdate=$dsql->f('insertdate');
+			$userid=$dsql->f('userid');
+			$pid=$dsql->f('pid');
+			$path =$dsql->f('path');
+			$newdepth =  substr_count($path,',');
+?>
+
+
+ <div id="admin-nav">
+        <div>
+            <ul class="nav admin-nav" style="height: 0;">
+                <li class="active">
+                    <ul class="nav nav-inline admin-nav">
+                        <?
+                            include("menu.php");
+                        ?>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+</div>
+	
+<center>
+<div class="admin">
+	<ul class="bread">
+	  <li><a href="grouplist.php">实验分组</a></li>
+	  <li>实验修改</li>
+	</ul>
+	<div class="ht301">
+		<div class="ht302">
+	</div>
+		<div class="ht304">
+			<div class="groupaction_div">
+				<h4>修改</h4>
+				<form method="post" action="groupaction.php?action=groupmodifyaction" class="groupaction_form rgform">
+					<input type="hidden" name="groupaddaction" value="863f907b">
+					<p>
+						<label for="group_pid">上级</label>
+						<select name="group_pid" size=1>
+							<option value="1"> - 无 - </option>
+							<?
+								$SQL = "SELECT    id ,	name 	  	,uid ,	pid 	,path 	,status     FROM experimentsgroup  order by path     ";
+								$dsql->query($SQL);
+
+								$nbsp = $pernbsp = "|---------";
+								$olddepth =1;
+								while($dsql->next_record()){
+									$id=$dsql->f('id');
+									$group_name=$dsql->f('name');
+
+									$insertdate=$dsql->f('insertdate');
+
+
+									$userid=$dsql->f('userid');
+									$group_pid=$dsql->f('pid');
+									$path =$dsql->f('path');
+									$newdepth =  substr_count($path,',');
+									$select = "";
+									if($id==$pid){
+										$select = "selected='selected' ";
+									}
+									if($newdepth==$olddepth){
+									//$nbsp = "|--";
+										echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+
+									}else if($newdepth>$olddepth){
+										$nbsp = $nbsp.$pernbsp;
+										echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+									}else{
+										$depthno = $olddepth - $newdepth;
+										$nbsp = substr($nbsp,0,strlen($nbsp)-strlen($pernbsp)*$depthno);
+										echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+									}
+									$olddepth =  $newdepth;
+								}
+							?>
+						</select>
+					</p>
+					<br /><br />
+					<p>
+						<label for="group_name">名称</label>
+						<input type="text" name="group_name" value="<?print($name)?>" size="20">
+					</p>
+					<br /><br />
+					<p>
+						<input type="submit" name="forumsubmit" value="提交" class="submit button bg-main" "  />
+						<input type="hidden" name="fid" value="<?print($fid)?>">
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<?
+		}
+	}else if($action == "forumdelete"){
+			$SQL= "select * from experimentsgroup where pid=$fid ";
+					 //echo $SQL;
+			if($dsql->query($SQL)){
+				if($dsql->next_record()){
+					echo "<div class='alert_window'><span>有子单位不能删除</span><a href='window.history.go(-1)'>返回继续操作</a></div>";
+				}else{
+
+					$SQL= "select * from experiments where groupid=$fid";
+					if($dsql->query($SQL)&&$dsql->next_record()){
+						echo "<div class='alert_window'><span>有实验不能删除</span><a href='window.history.go(-1)'>返回继续操作</a></div>";
+					}else{
+						$SQL = "delete from   experimentsgroup   where id='$fid'";
+						 //echo $SQL;
+						$dsql->query($SQL);
+						echo "<div class='alert_window'><span>删除成功</span><a href='window.history.go(-1)'>返回继续操作</a></div>";
+					}
+				}
+			}
+	}else if(isset($groupaddaction)){
+		if(strlen($group_name)>0){
+			$SQL = "insert into experimentsgroup (  name ,     id ,  pid )values('$group_name',0,$group_pid)  ";	
+			$dsql->query($SQL);
+			//echo $SQL;
+			//$SQL = "select lastinsertid() from experimentsgroup where id = $group_pid";
+			$SQL= "select last_insert_id()  as lastinsid,path from experimentsgroup  where id = $group_pid limit 0,1";
+			if(!$dsql->query($SQL)){
+				echo "";
+			}else{
+				$dsql->next_record() ;
+				$lastinsid = $dsql->f("lastinsid");
+				$path = $dsql->f("path");
+				$SQL= "update experimentsgroup set path='${path},$lastinsid' where id = $lastinsid;";
+				if(!$dsql->query($SQL)){
+					echo "";
+				}else{
+					echo "增加${group_name}成功";
+				}
+			}
+		}
+	}else{
+	if(strlen($SQL)<5){
+		$SQL = "SELECT    id ,	name 	  	,uid ,	pid 	,path 	,status     FROM experimentsgroup  order by path     ";
+	}
+	//echo $SQL . "\n";
+	$dsql->query($SQL);
+?>
+<style type="text/css">
+  .grouplist {
+      background: #1E8997;
+  }
+  .grouplist a {
+      color: #fff !important;
+  }
+</style>
+<div id="admin-nav">
+  <div>
+    <ul class="nav admin-nav" style="height: 0;">
+      <li class="active">
+        <ul class="nav nav-inline admin-nav">
+          <?
+          include("menu.php");
+          ?>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="admin">
+	<ul class="bread">
+	  <li><a href="grouplist.php">实验分组</a></li>
+	  <li>添加实验课分组</li>
+	</ul>
+	<div class="rfg"></div>
+	<div class="ht301">    
+		<div class="ht304">
+			<br> 
+			<form method="post" action="groupaction.php?action=groupaddaction&add=forum" class="form-x" style="width: 50%">
+				<input type="hidden" name="groupaddaction" value="863f907b">
+				<div class="form-group">
+					<div class="label">
+						<label for="group_id">上级:</label>
+					</div>
+					<div class="field">
+						<select name="group_pid" size=1 style="height:28px;">
+							<option value="1"> - 无 - </option>
+							<?
+								$nbsp = $pernbsp = "|---------";
+								$olddepth =1;
+								while($dsql->next_record()){
+									$id=$dsql->f('id');
+									$group_name=$dsql->f('name');
+									$insertdate=$dsql->f('insertdate');
+									$userid=$dsql->f('userid');
+									$group_pid=$dsql->f('pid');
+									$path =$dsql->f('path');
+									$newdepth =  substr_count($path,',');
+									$select = "";
+									if($id==$pid){
+										$select = "selected='selected' ";
+									}
+									if($newdepth==$olddepth){
+										echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+									}else if($newdepth>$olddepth){
+										$nbsp = $nbsp.$pernbsp;
+										echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+									}else{
+										$depthno = $olddepth - $newdepth;
+										$nbsp = substr($nbsp,0,strlen($nbsp)-strlen($pernbsp)*$depthno);
+										echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+									}
+									$olddepth =  $newdepth;
+								}
+							?>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="label">
+						<label for="group_name">名称:</label>
+					</div>
+					<div class="field">
+						<input class="input" type="text" name="group_name" value="名称" size="20">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="label">
+						<label for="group_name"></label>
+					</div>
+					<div class="field">
+						<input class="input button bg-main" type="submit" name="forumsubmit" value="提 交">
+					</div>
+				</div>
+				<!-- <table cellspacing="1" cellpadding="4" width="70%" align="center" class="rt_table" style="margin:auto;margin-top:60px;height:200px;">
+					<tr  height="45" class="header"><td colspan="5"><center>添加实验课分组</td></tr>
+						<tr height="45" align="center"><td bgcolor="#F8F8F8"  width="15%">上级:</td>
+							<td colspan="4" bgcolor="#FFFFFF"  width="27%">
+								<select name="group_pid" size=1 style="height:28px;">
+									<option value="1"> - 无 - </option>
+									<?
+										$nbsp = $pernbsp = "|---------";
+										$olddepth =1;
+										while($dsql->next_record()){
+											$id=$dsql->f('id');
+											$group_name=$dsql->f('name');
+											$insertdate=$dsql->f('insertdate');
+											$userid=$dsql->f('userid');
+											$group_pid=$dsql->f('pid');
+											$path =$dsql->f('path');
+											$newdepth =  substr_count($path,',');
+											$select = "";
+											if($id==$pid){
+												$select = "selected='selected' ";
+											}
+											if($newdepth==$olddepth){
+												echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+											}else if($newdepth>$olddepth){
+												$nbsp = $nbsp.$pernbsp;
+												echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+											}else{
+												$depthno = $olddepth - $newdepth;
+												$nbsp = substr($nbsp,0,strlen($nbsp)-strlen($pernbsp)*$depthno);
+												echo "<option value=\"$id\" $select>$nbsp|$group_name</option>";
+											}
+											$olddepth =  $newdepth;
+										}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr height="45" bgcolor="#FFFFFF" align="center"><td bgcolor="#F8F8F8" width="15%">名称:</td>
+							<td bgcolor="#FFFFFF" width="28%">
+								<input type="text" name="group_name" value="名称" size="20" style="height:25px;width:194px;text-indent:5px;">
+							</td>
+						</tr>
+						<tr height="45" bgcolor="#FFFFFF" align="center">
+							<td bgcolor="#F8F8F8" width="15%"><td colspan="4" bgcolor="#FFFFFF"  width="27%">
+								<input type="submit" name="forumsubmit" value="提 交" style="width: 60px;height: 30px;">
+							</td>
+						</tr>
+				</table> -->
+			</form>
+		</div>
+	</div>
+
+	<?
+		}
+	?>
+<?
+	include("footer.php");
+?>
+

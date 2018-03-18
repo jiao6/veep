@@ -1,0 +1,124 @@
+/* .contain2{
+	height: 1100px;
+} */
+.contain2 .left{
+	display: inline;
+	float: left;
+	margin: 56px 5px 0 15px;
+}
+.left ul li{
+	width: 180px;
+	height: 40px;
+	border: 1px solid #ccc;
+	border-bottom: 0px;
+	line-height: 30px;
+	padding: 5px;
+	background: #FAFAFA;
+}
+.left ul li:last-child{
+	border-bottom: 1px solid #ccc;
+}
+.left ul li span{
+	font-size: 15px;
+	opacity: .9;
+}
+.left ul li span:first-child{
+	float: left;
+	padding: 5px 10px;
+}
+.left ul li span:last-child{
+	float: right;
+	padding: 5px 10px;
+}
+.contain2 .right{
+	display: inline;
+	float: right;
+	margin-right: 15px;
+}
+.right .testbtm li,.right_rt .testbtm li{
+	background: #fff;
+	opacity: .9;
+	margin-bottom: 20px;
+	border: 1px solid #ccc;
+	box-shadow: 2px 2px 3px #ccc;
+	position: relative;
+}
+.contain2 .testbtm li{
+	width: 700px;
+	height: 170px;
+	position: relative;
+}
+.testbtm li img{
+		width: 220px;
+		height: 150px;
+		float: left;
+		padding: 10px;
+	}
+.clsrt{
+		width: 420px;
+		float: right;
+		left: 0;
+		padding: 7px;
+		top: 11px;
+	}
+.clsinfo{
+		position: relative;
+		top: 10px;
+	}
+
+
+
+	/* =====mycourse==== */
+
+.contain2 .right_rt{
+	display: inline;
+	float: left;
+	margin-left: 25px;
+	}
+.right_rt .selected{
+	background: #7EB1AC;
+	border-radius: 5px;
+	padding: 5px 10px;
+	float: right;
+	margin: 0 15px;
+	position: relative;
+	bottom: -40px;
+	color: #fff;
+	cursor: pointer;
+}
+.contain2 .left_lt{
+	display: inline;
+	float: right;
+	margin: 11px 0px 0 0;
+}
+.left_lt .tuijian{
+	background: #7EB1AC;
+	color: #fff;
+	width: 150px;
+	padding: 5px 10px;
+	margin-bottom: 5px;
+}
+.contain2 .left_lt ul li{
+	width: 170px;
+	height: 240px;
+	border: 1px solid #ccc;
+	background: #FCFDFB;
+	margin-bottom: 10px;
+	box-shadow: 2px 2px 3px #ccc;
+}
+.left_lt ul li img{
+	width: 170px;
+	height: 128px;
+}
+.left_lt ul li .hed{
+	display: block;
+	padding:8px;
+	font-size: 14px;
+	opacity: .8;
+}
+.left_lt ul li .pair{
+	font-size: 12px;
+	color: #999999;
+	padding: 5px;
+	margin-left: 5px;
+}
